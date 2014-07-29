@@ -1,46 +1,70 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
- <head>
-     <meta charset="utf-8">
-     <title>HTML5 Geolocation</title>
-	 <script type="text/javascript" name="baidu-tc-cerfication" src="http://apps.bdimg.com/cloudaapi/lightapp.js#30f69a6ff0a329e07cd2dea5444ee2a8"></script> <script type="text/javascript">window.bd && bd._qdc && bd._qdc.init({app_id: '0e2e6bfd3dee074135c81cbf'});</script>
- </head>
-<body>
-<p id="demo">点击这个按钮，获得您的坐标：</p>
-<button onclick="getLocation()">试一下</button>
-<script>
-var x = document.getElementById("demo");
-function getLocation() {
-	if (navigator.geolocation) {
-		alert("1");
-		navigator.geolocation.getCurrentPosition(showPosition, failPosition);
-	} else {
-		alert("Geolocation is not supported by this browser.");
-		// x.innerHTML = "Geolocation is not supported by this browser.";
-	}
-};
-function showPosition(position) {
-	// x.innerHTML = "Latitude: " + position.coords.latitude +
-	// 	"<br />Longitude: " + position.coords.longitude;
-	alert("s");
-	var map = "Latitude: " + position.coords.latitude +
-		"<br />Longitude: " + position.coords.longitude;		
-	alert(map);
-};
-function failPosition(error) {
-	alert("f");
-	switch(error.code) {
-		case error.TIMEOUT:
-			alert("Connection timeout, please retry later");
-			break;
-		case error.PERMISSION_DENIED:
-			alert("You've denied to share the location service, inquiry is cancelled");
-			break;
-		case error.POSITION_UNAVAILABLE:
-			alert("Sorry, position is unavailable");
-			break;
-	}
-};
-</script>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,inital-scale=1,maximum-scale=1, minimum-scale=1, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>上海碧昂文化传播有限公司</title>
+<link href="css/jquery.mobile-1.4.3.min.css" rel="stylesheet" type="text/css"/>
+<script src="js/jquery-1.11.1.min.js" type="text/javascript"></script>
+<script src="js/jquery.mobile-1.4.3.min.js" type="text/javascript"></script>
+<script src="js/bootstrap-3.2.0.min.js" type="text/javascript"></script>
+</head> 
+<body class="ui-mobile-viewport ui-overlay-a"> 
+<div data-role="page" id="page" data-theme="a">
+	<div data-role="header" data-position="fixed" >
+		<h1>碧昂文化</h1>
+	</div>
+	<div data-role="content">	
+		<ul data-role="listview">
+			<li><a href="#page2" data-rel="dialog" data-transition="slide">关于我们</a></li>
+            <li><a href="#page3">联系我们</a></li>
+			<li><a href="recruitment.html" data-rel="dialog" data-transition="slide" data-ajax="false">求职招聘</a></li>
+			<li><a href="oa.html" data-transition="slide" data-ajax="false">微办公OA</a></li>
+		</ul>		
+	</div>
+	<div data-role="footer" data-position="fixed">
+		<h4>页脚</h4>
+	</div>
+</div>
+
+<div data-role="page" id="page2">
+	<div data-role="header">
+		<h1>关于我们</h1>
+	</div>
+	<div data-role="content">	
+		内容
+	</div>
+	<div data-role="footer" data-position="fixed">
+		<h4>页脚</h4>
+	</div>
+</div>
+
+<div data-role="page" id="page3">
+	<div data-role="header">
+		<h1>联系我们</h1>
+	</div>
+	<div data-role="content">	
+		内容
+	</div>
+	<div data-role="footer" data-position="fixed">
+		<h4>页脚</h4>
+	</div>
+</div>
+
+<div data-role="page" id="page4">
+	<div data-role="header">
+		<h1>求职招聘</h1>
+	</div>
+	<div data-role="content">	
+		内容
+	</div>
+	<div data-role="footer" data-position="fixed">
+		<h4>页脚</h4>
+	</div>
+</div>
+
 </body>
 </html>

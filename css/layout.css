@@ -1,0 +1,22 @@
+
+	@media all and (min-width:400px) { /* vertical ∫·∆¡ */
+		#bmp {
+			width : 300px;			
+			height : 240px;
+			float : left;
+			margin-right: 20px;
+		}
+		#control {
+			width : 200px;
+			float : right;
+		}
+	}
+	@media all and (max-width:399px) { /* vertical  ˙∆¡ */
+		#bmp {
+			width : 100%;
+			height : 400px;
+		}
+		#control {
+			width : 100%;
+		}
+	}
