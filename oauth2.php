@@ -1,7 +1,7 @@
 <?php session_start();
 	$code = $_GET['code']; //前端传来的code值
 	$appid = "wxc63c757bdae5dd41";
-	$appsecret = "fa68568880b31435badf3070cdd27a54";//获取openid
+	$appsecret = "05fc96a2887de802e694252b040fc53f";//获取openid
 	$url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=$appid&secret=$appsecret&code=$code&grant_type=authorization_code";	
 	$result = https_request($url);
 	$jsoninfo = json_decode($result, true);

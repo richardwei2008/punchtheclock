@@ -1,8 +1,8 @@
 var CONFIG = {
 	LOCAL: false,
 	DEBUG: false,
-	DOMAIN : "http://beyondwechattest.sinaapp.com",
-	OAUTH_URL : "http://beyondwechattest.sinaapp.com/oauth2.php",
+	DOMAIN : "http://beyondwechattest.vipsinaapp.com",
+	OAUTH_URL : "http://beyondwechattest.vipsinaapp.com/oauth2.php",
 	LOCATION : {
 		COMPANY : {lng : 121.476350, lat : 31.22452},
 		HOME : {lng : 121.178454, lat : 31.36203}
