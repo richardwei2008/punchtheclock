@@ -41,10 +41,11 @@ App = {
     },
     punch: function () {
         "use strict";
-        var geolocation = new BMap.Geolocation();  //实例化浏览器定位对象。
+        var geolocation = new BMap.Geolocation(), //实例化浏览器定位对象。
         // 下面是getCurrentPosition方法。调用该对象的getCurrentPosition()，与HTML5不同的是，
         // 这个方法原型是getCurrentPosition(callback:function[, options: PositionOptions])，
         // 也就是说无论成功与否都执行回调函数1，第二个参数是关于位置的选项。 因此能否定位成功需要在回调函数1中自己判断。
+            that = this;
         geolocation.getCurrentPosition(function (r) { //定位结果对象会传递给r变量
             if (this.getStatus() === BMAP_STATUS_SUCCESS) { // 通过Geolocation类的getStatus()可以判断是否成功定位。
                 var located = r.point;
@@ -71,9 +72,8 @@ App = {
             }
             if (!$.isEmptyObject(userInfo.openid)) {
                 Beyond.BaiduMap.addMyPosition(App.map, located, userIcon);
-                var punchBtn = $("#punch");
-                punchBtn.text("退    出");
-                punchBtn.unbind('click').bind("click", function () {
+                $("#punch").text("退    出");
+                $("#punch").unbind('click').bind("click", function () {
                     window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf('/')) + "/oa.html";
                 });
                 alert("签到成功！");
@@ -82,6 +82,7 @@ App = {
                 $("#errMsg").text("获得用户信息失败，无法签到，请重新登陆");
                 $.mobile.changePage('#err', {transition: 'pop', role: 'dialog'});
             }
+            return;
         };
     },
     processAfterAuth: function (globalUser) {
