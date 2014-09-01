@@ -16,8 +16,10 @@
     <script src="js/app.config.js"></script>
     <script src="js/app.js"></script>
 <script type="text/javascript">
-		$(window).ready(function () {
-			$('#attendance').click(Beyond.WeChat.redirectToPageWithOauth("attendance.html"));
+		$(window).ready(function () {			
+			$('#attendance').click(function(){
+				Beyond.WeChat.redirectToPageWithOauth("attendance.html");			
+			});
 		});
 </script>
 </head> 

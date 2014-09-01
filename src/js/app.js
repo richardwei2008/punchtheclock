@@ -19,13 +19,13 @@ App = {
     },
     process: function (p) {
         "use strict";
-        App.alert('您的位置：' + p.lng + ',' + p.lat);
-        App.alert("Now:" + JSON.stringify(p));
-        App.alert("D:" + JSON.stringify(App.target));
+        // App.alert('您的位置：' + p.lng + ',' + p.lat);
+        // App.alert("Now:" + JSON.stringify(p));
+        // App.alert("D:" + JSON.stringify(App.target));
 
         var located = new BMap.Point(p.lng, p.lat);
         App.distance = Beyond.BaiduMap.getDistance(App.target.lat, App.target.lng, p.lat, p.lng);
-        App.alert('您的距离（雁荡大厦）：' + App.distance); // r对象的point属性也是一个对象，这个对象的lng属性表示经度，lat属性表示纬度。
+        // App.alert('您的距离（雁荡大厦）：' + App.distance); // r对象的point属性也是一个对象，这个对象的lng属性表示经度，lat属性表示纬度。
         if (App.distance > 500) {
             $("#err_distance").text(Math.ceil(App.distance));
             $.mobile.changePage('#err', {transition: 'pop', role: 'dialog'});
@@ -35,7 +35,7 @@ App = {
             $("#confirm").unbind('click').bind('click', App.confirmAndSubmit(located));
             $.mobile.changePage('#warn', {transition: 'pop', role: 'dialog'});
         } else {
-            App.alert("accurate");
+            // App.alert("accurate");
             App.confirmAndSubmit(located)(this);
         }
     },
@@ -51,9 +51,9 @@ App = {
                 var located = r.point;
                 App.process(located);
             } else {
-                this.alert('Failed' + Beyond.BaiduMap.getCurrentPositionFailed(this.getStatus()));
+                // this.alert('Failed' + Beyond.BaiduMap.getCurrentPositionFailed(this.getStatus()));
                 if (!Beyond.Browser.versions.mobile) {
-                    App.alert("非移动终端环境，尝试模拟数据定位");
+                    // App.alert("非移动终端环境，尝试模拟数据定位");
                     App.process(this.Config.MOCK_LOCATED.COMPANY);
                 }
             }
@@ -66,7 +66,7 @@ App = {
         return function () {
             var userInfo = Beyond.WeChat.requireOauth(App.processAfterAuth),
                 userIcon = "";
-            App.alert(JSON.stringify(userInfo));
+            // App.alert(JSON.stringify(userInfo));
             if (userInfo !== null) {
                 userIcon = userInfo.headimgurl;
             }
@@ -88,10 +88,10 @@ App = {
     processAfterAuth: function (globalUser) {
         "use strict";
         return (function () {
-            alert(this);
-            alert(App);
-            App.alert("processAfterAuth");
-            App.alert("After-authCallback " + JSON.stringify(globalUser));
+            // alert(this);
+            // alert(App);
+            // App.alert("processAfterAuth");
+            // App.alert("After-authCallback " + JSON.stringify(globalUser));
             $.ajax({
                 async: false,
                 type: 'POST',
@@ -99,7 +99,7 @@ App = {
                 data: JSON.stringify(globalUser),
                 dataType: 'json',
                 success: function (data, textStatus, xhr) {
-                    App.alert("Post-submit (success) " + xhr.responseText);
+                    // App.alert("Post-submit (success) " + xhr.responseText);
                 },
                 error: function (xhr) {
                     $("#fatalMsg").html(xhr.responseText);
