@@ -9,7 +9,8 @@ App = {
     map: {},
     target: {},
     distance : 99999,
-    init: function () {
+    globalUser: {},
+    initMap: function () {
         "use strict";
         App.map = new BMap.Map("bmp");
         App.target = new BMap.Point(this.Config.LOCATION.COMPANY.lng, this.Config.LOCATION.COMPANY.lat); // 定位 家
@@ -17,7 +18,7 @@ App = {
         App.map.addOverlay(marker);
         App.map.centerAndZoom(App.target, 25);
     },
-    process: function (p) {
+    processAttendance: function (p) {
         "use strict";
         // App.alert('您的位置：' + p.lng + ',' + p.lat);
         // App.alert("Now:" + JSON.stringify(p));
@@ -32,11 +33,11 @@ App = {
         } else if (App.distance > 200) {
             $("#warn_distance").text(Math.ceil(App.distance));
             $("#relocate").unbind('click').bind("click", App.punch);
-            $("#confirm").unbind('click').bind('click', App.confirmAndSubmit(located));
+            $("#confirm").unbind('click').bind('click', App.confirmAndSubmitAttendance(located));
             $.mobile.changePage('#warn', {transition: 'pop', role: 'dialog'});
         } else {
             // App.alert("accurate");
-            App.confirmAndSubmit(located)(this);
+            App.confirmAndSubmitAttendance(located)(this);
         }
     },
     punch: function () {
@@ -49,22 +50,22 @@ App = {
         geolocation.getCurrentPosition(function (r) { //定位结果对象会传递给r变量
             if (this.getStatus() === BMAP_STATUS_SUCCESS) { // 通过Geolocation类的getStatus()可以判断是否成功定位。
                 var located = r.point;
-                App.process(located);
+                App.processAttendance(located);
             } else {
                 // this.alert('Failed' + Beyond.BaiduMap.getCurrentPositionFailed(this.getStatus()));
                 if (!Beyond.Browser.versions.mobile) {
                     // App.alert("非移动终端环境，尝试模拟数据定位");
-                    App.process(this.Config.MOCK_LOCATED.COMPANY);
+                    App.processAttendance(this.Config.MOCK_LOCATED.COMPANY);
                 }
             }
         }, {
             enableHighAccuracy: true
         });
     },
-    confirmAndSubmit: function (located) {
+    confirmAndSubmitAttendance: function (located) {
         "use strict";
         return function () {
-            var userInfo = Beyond.WeChat.requireOauth(App.processAfterAuth),
+            var userInfo = Beyond.WeChat.requireOauth(App.processAttendanceAfterAuth),
                 userIcon = "";
             // App.alert(JSON.stringify(userInfo));
             if (userInfo !== null) {
@@ -72,7 +73,7 @@ App = {
             }
             if (!$.isEmptyObject(userInfo.openid)) {
                 Beyond.BaiduMap.addMyPosition(App.map, located, userIcon);
-                $("#punch").text("退    出");
+                $("#punch").html("退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出");
                 $("#punch").unbind('click').bind("click", function () {
                     window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf('/')) + "/oa.html";
                 });
@@ -85,7 +86,7 @@ App = {
             return;
         };
     },
-    processAfterAuth: function (globalUser) {
+    processAttendanceAfterAuth: function (globalUser) {
         "use strict";
         return (function () {
             // alert(this);
@@ -95,7 +96,7 @@ App = {
             $.ajax({
                 async: false,
                 type: 'POST',
-                url: "services/save.php",
+                url: "services/AttendanceService.php",
                 data: JSON.stringify(globalUser),
                 dataType: 'json',
                 success: function (data, textStatus, xhr) {
@@ -107,7 +108,113 @@ App = {
                 }
             });
         }(this));
-
+    },
+    viewHistory : function() {
+        $.mobile.changePage('#history', "slideup");
+    },
+    backToPunch : function() {
+        $.mobile.changePage('#mainPunch', "slide");
+    },
+    initLeave: function () {
+        "use strict";
+        //        App.alert("Init leave");
+        App.globalUser = Beyond.WeChat.requireOauth(App.processLeaveOnLoad);
+        var userIcon = "images/me.png";
+        if (App.globalUser !== null
+            && App.globalUser.headimgurl !== null
+            && App.globalUser.headimgurl !== "") {
+            userIcon = App.globalUser.headimgurl;
+        }
+//        App.alert(userIcon);
+        $("#icon").attr("src", userIcon);
+    },
+    leave: function () {
+        "use strict";
+//        App.alert("Am leaving");
+        App.processLeave(App.globalUser);
+    },
+    processLeave: function (p) {
+        "use strict";
+        App.confirmAndSubmitLeave(p)(this);
+    },
+    confirmAndSubmitLeave: function (userInfo) {
+        "use strict";
+        return function () {
+            App.processLeaveAfterAuth(userInfo);
+            var userIcon = "";
+            if (userInfo !== null) {
+                userIcon = userInfo.headimgurl;
+            }
+            return;
+        };
+    },
+    processLeaveOnLoad: function (globalUser) {
+        "use strict";
+        return (function () {
+            // App.alert("processLeaveOnLoad " + JSON.stringify(globalUser));
+            $.ajax({
+                async: false,
+                type: 'POST',
+                url: "services/UserService.php",
+                data: JSON.stringify(globalUser),
+                dataType: 'json',
+                success: function (data, textStatus, xhr) {
+//                    App.alert("Post-submit (success) " + JSON.stringify(data.me.name));
+                    // $('#name').val(data.me.name);
+                    $('#name').text(data.me.name);
+                },
+                error: function (xhr) {
+                    $("#fatalMsg").html(xhr.responseText);
+                    $.mobile.changePage('#fatal', {transition: 'pop', role: 'dialog'});
+                }
+            });
+        }(this));
+    },
+    processLeaveAfterAuth: function (globalUser) {
+        "use strict";
+        return (function () {
+            // App.alert("Before-submit processLeaveAfterAuth " +   JSON.stringify($("#mainForm").serializeJSON()));
+            $.ajax({
+                async: false,
+                type: 'POST',
+                url: "services/LeaveService.php",
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                timeout : 1000,
+                dataType : 'json',
+                data: JSON.stringify({method : "POST", openid: globalUser.openid, data : $("#mainForm").serializeJSON()}),
+                success: function (response) {
+                    // App.alert("Post-submit processLeaveAfterAuth (success) " + xhr.responseText);
+                    if (response.success) {
+//                        App.alert("Post-submit processLeaveAfterAuth (success) " + JSON.stringify(response));
+                        // window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf('/')) + "/submitted.html";
+                        if (!$.isEmptyObject(globalUser.openid)) {
+                            $("#leave").html("退&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;出");
+                            $("#leave").unbind('click').bind("click", function () {
+                                window.location.href = window.location.href.substring(0, window.location.href.lastIndexOf('/')) + "/oa.html";
+                            });
+                            alert("请假成功！");
+                        } else {
+                            $("#errMsg").text("获得用户信息失败，无法请假，请重新登陆");
+                            $.mobile.changePage('#err', {transition: 'pop', role: 'dialog'});
+                        }
+                    } else {
+                        switch (response.code) {
+                            case 'E001':
+                                $("#errorMsg").html(response.message);
+                                break;
+                            default :
+                                $("#errorMsg").html("未知错误，请联系管理员—" + JSON.stringify(response));
+                                break;
+                        }
+                        $.mobile.changePage('#err', {transition: 'pop', role: 'dialog'});
+                    }
+                },
+                error: function (xhr) {
+                    $("#fatalMsg").html(xhr.responseText);
+                    $.mobile.changePage('#fatal', {transition: 'pop', role: 'dialog'});
+                }
+            });
+        }());
     }
 };
 

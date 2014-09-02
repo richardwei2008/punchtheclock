@@ -20,6 +20,9 @@
 			$('#attendance').click(function(){
 				Beyond.WeChat.redirectToPageWithOauth("attendance.html");			
 			});
+            $('#leave').click(function(){
+                Beyond.WeChat.redirectToPageWithOauth("leave.html");
+            });
 		});
 </script>
 </head> 
@@ -30,7 +33,8 @@
 		<h1>微办公</h1>
 	</div>
 	<div data-role="content" data-position="fixed" > 
-		<button id="attendance" class="ui-btn ui-shadow ui-corner-all ui-btn-active" data-inline="true">考勤系统</button>
+		<button id="attendance" class="ui-btn ui-shadow ui-corner-all ui-btn-active" data-inline="true">考&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;勤</button>
+        <button id="leave" class="ui-btn ui-shadow ui-corner-all ui-btn-active" data-inline="true">请&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;假</button>
 	</div>
 	<div data-role="footer" data-position="fixed">
 		<h4><a href="index.html" data-transition="slide" data-ajax="false">返回首页</a></h4>

@@ -25,8 +25,10 @@
     <script src="js/app.js"></script>
 	<script>
 	$(window).ready(function () {
-		App.init();
+		App.initMap();
 		$("#punch").unbind('click').bind("click", App.punch);
+        $("#viewHistory").unbind('click').bind("click", App.viewHistory);
+        $("#backToPunch").unbind('click').bind("click", App.backToPunch);
 		$("#errClose").unbind('click').bind('click',
 			function(){
 				$('#err').dialog('close');
@@ -42,7 +44,7 @@
 </script>
  </head>
 <body>
-<div data-role="page" id="page">
+<div data-role="page" id="mainPunch">
 	<!--
 	<div data-role="header" data-position="fixed">
 		<h1>考勤系统</h1>
@@ -52,7 +54,8 @@
 		<div id="container" >
 			<div id="bmp" data-inline="true"></div>
 			<div id="control" data-inline="true">
-				<button id="punch" class="ui-btn ui-shadow ui-corner-all ui-btn-active" data-mini="true" data-inline="true">打    卡</button>
+				<button id="punch" class="ui-btn ui-shadow ui-corner-all ui-btn-active" data-mini="true" data-inline="true">打&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;卡</button>
+                <button id="viewHistory" class="ui-btn ui-shadow ui-corner-all ui-btn-active" data-mini="true" data-inline="true">历史记录</button>
 			</div>
 		</div>
 	</div>
@@ -62,7 +65,32 @@
 	</div>
 	-->
 </div>
-
+<div data-role="page" id="history" data-dismissible="false">
+    <div data-role="header">
+        <h1><span class="label label-danger">历史记录</span></h1>
+    </div>
+    <div data-role="content">
+        <div>
+            <div class="ui-grid-b">
+                <div class="ui-block-a ui-block-date-custom"><div class="ui-bar ui-bar-a ui-block-header-custom">日&nbsp;&nbsp;期</div></div>
+                <div class="ui-block-b ui-block-come-custom"><div class="ui-bar ui-bar-a  ui-block-header-custom">上&nbsp;班</div></div>
+                <div class="ui-block-c ui-block-leave-custom"><div class="ui-bar ui-bar-a  ui-block-header-custom">下&nbsp;班</div></div>
+                <div class="ui-block-a ui-block-date-custom"><div class="ui-bar ui-bar-a  ui-block-cell-custom">星期一 2014-9-1</div></div>
+                <div class="ui-block-b ui-block-come-custom"><div class="ui-bar ui-bar-a  ui-block-cell-custom">08:56</div></div>
+                <div class="ui-block-c ui-block-leave-custom"><div class="ui-bar ui-bar-a  ui-block-cell-custom">23:35</div></div>
+                <div class="ui-block-a ui-block-date-custom"><div class="ui-bar ui-bar-a  ui-block-cell-custom">星期二 2014-9-2</div></div>
+                <div class="ui-block-b ui-block-come-custom"><div class="ui-bar ui-bar-a  ui-block-cell-custom">07:35</div></div>
+                <div class="ui-block-c ui-block-leave-custom"><div class="ui-bar ui-bar-a  ui-block-cell-custom ui-block-cell-exception-custom">未打卡</div></div>
+            </div>
+        </div>
+        <button id="backToPunch" class="ui-btn ui-shadow ui-corner-all  ui-btn-active" data-mini="true" data-inline="true">返&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;回</button>
+    </div>
+<!--
+    <div data-role="footer" data-position="fixed">
+        <h4>页脚</h4>
+    </div>
+    -->
+</div>
 <div data-role="page" id="fatal" data-dismissible="false">
 	<div data-role="header">
 		<h1><span class="label label-danger">严重错误</span></h1>
